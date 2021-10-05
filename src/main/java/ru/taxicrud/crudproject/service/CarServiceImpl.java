@@ -17,32 +17,34 @@ public class CarServiceImpl implements CarService {
     private CarRepository carRepository;
 
     @Transactional
-    public CarEntity findById(Long id){
+    public CarEntity findById(Long id) {
         return carRepository.findById(id).get();
     }
 
     @Transactional
-    public void addCar(CarEntity carEntity){
+    public void addCar(CarEntity carEntity) {
         carRepository.save(carEntity);
     }
+
     @Transactional
-    public Iterable<CarEntity> getCar(){
-         return carRepository.findAll();
+    public Iterable<CarEntity> getCar() {
+        return carRepository.findAll();
     }
+
     @Transactional
-    public void editCar(Long id, CarEntity carEntity){
+    public void editCar(Long id, CarEntity carEntity) {
         if (!carRepository.existsById(id)) {
             log.info("Car with id " + id + " not found");
-        }
-        else {
+        } else {
             CarEntity carForId = carRepository.findById(id).get();
             carForId.setModel(carEntity.getModel());
             carRepository.save(carForId);
         }
     }
+
     @Transactional
-    public void deleteCar(Long id){
-        CarEntity delete = carRepository.findById(id).get();
-        carRepository.delete(delete);
+    public void deleteCar(Long id) {
+        CarEntity delCar = carRepository.findById(id).get();
+        carRepository.delete(delCar);
     }
 }

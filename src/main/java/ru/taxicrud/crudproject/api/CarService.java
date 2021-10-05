@@ -1,9 +1,6 @@
 package ru.taxicrud.crudproject.api;
 
-
 import ru.taxicrud.crudproject.model.CarEntity;
-
-import java.util.Optional;
 
 public interface CarService {
 
@@ -13,7 +10,7 @@ public interface CarService {
 
     Iterable<CarEntity> getCar();
 
-    void editCar(Long id,CarEntity carEntity);
+    void editCar(Long id, CarEntity carEntity);
 
     void deleteCar(Long id);
 

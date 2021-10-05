@@ -5,11 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.taxicrud.crudproject.api.TaxiDriverInfoService;
-import ru.taxicrud.crudproject.model.CityQueueEntity;
 import ru.taxicrud.crudproject.model.TaxiDriverInfoEntity;
 import ru.taxicrud.crudproject.repository.TaxiDriverInfoRepository;
 
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -28,20 +26,27 @@ public class TaxiDriverInfoServiceImpl implements TaxiDriverInfoService {
     }
 
     @Transactional
-    public void getDriver(TaxiDriverInfoEntity taxiDriverInfoEntity) {
-        taxiDriverInfoRepository.findAll();
+    public Iterable<TaxiDriverInfoEntity> getDriver() {
+        return taxiDriverInfoRepository.findAll();
     }
 
     @Transactional
     public void editDriver(Long id, TaxiDriverInfoEntity taxiDriverInfoEntity) {
         if (!taxiDriverInfoRepository.existsById(id)) {
             log.info("Driver with id " + id + " not found");
+        } else {
+            TaxiDriverInfoEntity driverForId = taxiDriverInfoRepository.findById(id).get();
+            driverForId.setLastName(taxiDriverInfoEntity.getLastName());
+            driverForId.setFirstName(taxiDriverInfoEntity.getFirstName());
+            driverForId.setLevel(taxiDriverInfoEntity.getLevel());
+            driverForId.setCarModel(taxiDriverInfoEntity.getCarModel());
+            taxiDriverInfoRepository.save(driverForId);
         }
-        taxiDriverInfoRepository.save(taxiDriverInfoEntity);
     }
 
     @Transactional
-    public void deleteDriver(TaxiDriverInfoEntity taxiDriverInfoEntity) {
-        taxiDriverInfoRepository.delete(taxiDriverInfoEntity);
+    public void deleteDriver(Long id) {
+        TaxiDriverInfoEntity delDriver = taxiDriverInfoRepository.findById(id).get();
+        taxiDriverInfoRepository.delete(delDriver);
     }
 }

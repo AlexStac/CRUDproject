@@ -5,11 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.taxicrud.crudproject.api.CityQueueService;
-import ru.taxicrud.crudproject.model.CarEntity;
 import ru.taxicrud.crudproject.model.CityQueueEntity;
 import ru.taxicrud.crudproject.repository.CityQueueRepository;
 
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -28,20 +26,25 @@ public class CityQueueServiceImpl implements CityQueueService {
     }
 
     @Transactional
-    public void getCity(CityQueueEntity cityQueueEntity) {
-        cityQueueRepository.findAll();
+    public Iterable<CityQueueEntity> getCity(){
+        return cityQueueRepository.findAll();
     }
 
     @Transactional
     public void editCity(Long id, CityQueueEntity cityQueueEntity) {
         if (!cityQueueRepository.existsById(id)) {
             log.info("City with id " + id + " not found");
+        } else {
+            CityQueueEntity cityForId = cityQueueRepository.findById(id).get();
+            cityForId.setName(cityQueueEntity.getName());
+            cityForId.setQueue(cityQueueEntity.getQueue());
+            cityQueueRepository.save(cityForId);
         }
-        cityQueueRepository.save(cityQueueEntity);
     }
 
     @Transactional
-    public void deleteCity(CityQueueEntity cityQueueEntity) {
-        cityQueueRepository.delete(cityQueueEntity);
+    public void deleteCity(Long id) {
+        CityQueueEntity delCity = cityQueueRepository.findById(id).get();
+        cityQueueRepository.delete(delCity);
     }
 }

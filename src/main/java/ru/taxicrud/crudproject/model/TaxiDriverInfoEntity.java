@@ -1,6 +1,7 @@
 package ru.taxicrud.crudproject.model;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,5 +35,6 @@ public class TaxiDriverInfoEntity {
     private String carModel;
 
     @Column(name = "create_dttm")
+    @CreationTimestamp
     private Date createDttm;
 }
